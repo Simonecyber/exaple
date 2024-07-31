@@ -1,50 +1,47 @@
 <?php
 
 use Illuminate\Support;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 
 
-Route::get('/', function () {
+Route::view('/', 'home');
 
-    $jobs = Job::all();
-    //dd($jobs[0]->title);
+/*
+Route::controller(JobController::class)->group(function(){
 
-    return view('home');
-});
+//Index
+Route::get('/jobs', 'index');
+//Create
+Route::get('/jobs/create','create');
+//Show
+Route::get('/jobs/{job}', 'show');
+//Store
+Route::post('/jobs', 'store');
+//Edit
+Route::get('/jobs/{id}/edit', 'edit');
+//Update
+Route::patch('/jobs/{job}', 'udate');
+//Destroy
+Route::delete('/jobs/{job}','destroy');
 
 
-Route::get('/jobs', function ()  {
-    $jobs = Job::with('employer')->latest()->simplePaginate(3);
-    return view('jobs.index',[
-        'jobs' => $jobs
-    ]);
-});
-
-Route::get('/jobs/create', function () {
-
-    return view('jobs.create');
-});
-
-Route::get('/jobs/{id}', function ($id) {
-    $job = Job::find($id);
-
-    return view('jobs.show', ['job' => $job]);
-});
-
-Route::post('/jobs', function () {
-    // validation ...
-
-    Job::create([
-        'title' => request('title'),
-        'salary' => request('salary'),
-        'employer_id' => 1
-    ]);
-    return redirect('/jobs');
-});
+=================
+TIP FOR ROUTE
+- Route model binding
+- Controller classes
+- Route::view()
+- listing your route
+- route groups
+- route resources
 
 
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+});*/
+
+Route::resource('jobs', JobController::class, [
+    'except' => ['edit']
+]);
+
+Route::view('/contact', 'contact');
